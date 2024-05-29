@@ -18,8 +18,7 @@ His research interests are focused on Multi-Modal Learning, encompassing
 4. Radar-based Embodied Perception
 5. AI applications on IVF
 
-Publications
-### (* denotes equal contributions)
+Publications (* denotes equal contributions)
 ======
 
 ## Preprint
