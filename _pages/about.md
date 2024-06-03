@@ -22,6 +22,14 @@ Publications (* denotes equal contributions)
 ======
 
 ## Preprint
++ RePaIR: Repair Pruning at Initialization Resilience <br>
+  |paper|code|  <br>
+  Haocheng Zhao<sup>*</sup>, Runwei Guan<sup>*</sup>, Limin Yu, Junqing Zhang, Ka Lok Man, Yutao Yue
+
++ radarODE: An ODE-Embedded Deep Learning Model for Contactless ECG Reconstruction from Millimeter-Wave Radar  <br>
+  |paper|code|  <br>
+  Yuanyuan Zhang, Runwei Guan, Lingxiao Li, Rui Yang, Yutao Yue, Eng Gee Lim
+  
 + Talk2Radar: Bridging Natural Language with 4D mmWave Radar for 3D Referring Expression Comprehension <br>
   |[paper](https://arxiv.org/abs/2405.12821)|[code](https://github.com/GuanRunwei/Talk2Radar)| <br>
    Runwei Guan<sup>*</sup>, Ruixiao Zhang<sup>*</sup>, Ningwei Ouyang<sup>*</sup>, Jianan Liu<sup>*</sup>, Ka Lok Man, Xiaohao Cai, Ming Xu, Jeremy Smith, Eng Gee Lim, Yutao Yue, Hui Xiong
