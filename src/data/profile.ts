@@ -127,39 +127,3 @@ export const services = {
   ],
 }
 
-// ---------- Visitor globe data ----------
-// Demo data shown until a live analytics endpoint is configured.
-// To use real data: deploy the site, then either
-//   1) set VITE_VISITOR_API to an endpoint returning [{city, country, lat, lng, visits}], or
-//   2) export data from your analytics (e.g. GoatCounter / Cloudflare / Plausible)
-//      into src/data/visitors.json with the same shape.
-export interface VisitorPoint {
-  city: string
-  country: string
-  lat: number
-  lng: number
-  visits: number
-}
-
-export const visitorPoints: VisitorPoint[] = [
-  { city: 'Guangzhou', country: 'China', lat: 23.13, lng: 113.26, visits: 486 },
-  { city: 'Hong Kong', country: 'China', lat: 22.32, lng: 114.17, visits: 372 },
-  { city: 'Beijing', country: 'China', lat: 39.9, lng: 116.4, visits: 298 },
-  { city: 'Shanghai', country: 'China', lat: 31.23, lng: 121.47, visits: 264 },
-  { city: 'Shenzhen', country: 'China', lat: 22.54, lng: 114.06, visits: 221 },
-  { city: 'Liverpool', country: 'United Kingdom', lat: 53.41, lng: -2.98, visits: 187 },
-  { city: 'London', country: 'United Kingdom', lat: 51.5, lng: -0.12, visits: 156 },
-  { city: 'Singapore', country: 'Singapore', lat: 1.35, lng: 103.82, visits: 143 },
-  { city: 'San Francisco', country: 'United States', lat: 37.77, lng: -122.42, visits: 128 },
-  { city: 'New York', country: 'United States', lat: 40.71, lng: -74.0, visits: 104 },
-  { city: 'Boston', country: 'United States', lat: 42.36, lng: -71.06, visits: 86 },
-  { city: 'Melbourne', country: 'Australia', lat: -37.81, lng: 144.96, visits: 74 },
-  { city: 'Sydney', country: 'Australia', lat: -33.87, lng: 151.21, visits: 61 },
-  { city: 'Tokyo', country: 'Japan', lat: 35.68, lng: 139.69, visits: 58 },
-  { city: 'Seoul', country: 'South Korea', lat: 37.57, lng: 126.98, visits: 47 },
-  { city: 'Munich', country: 'Germany', lat: 48.14, lng: 11.58, visits: 39 },
-  { city: 'Zurich', country: 'Switzerland', lat: 47.37, lng: 8.54, visits: 33 },
-  { city: 'Toronto', country: 'Canada', lat: 43.65, lng: -79.38, visits: 29 },
-  { city: 'Bangalore', country: 'India', lat: 12.97, lng: 77.59, visits: 24 },
-  { city: 'Gothenburg', country: 'Sweden', lat: 57.71, lng: 11.97, visits: 18 },
-]
