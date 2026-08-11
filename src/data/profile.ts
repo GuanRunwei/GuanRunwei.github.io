@@ -52,7 +52,22 @@ export const researchInterests = [
   'AI + IVF',
 ]
 
-export const projects = [
+export interface Project {
+  title: string
+  org: string
+  role: string
+  period?: string
+  note?: string
+}
+
+export const projects: Project[] = [
+  {
+    title: 'Embodied-Intelligence Data Synthesis via 3D Reconstruction and Generative Learning (Sur2Ego)',
+    org: 'GAC Group commissioned project',
+    role: 'Key Executor (PI: Prof. Hui Xiong)',
+    period: '2026 – present',
+    note: 'Industrial collaborator: Dr. Yin Zhou (Chief Scientist & Head of Autonomy, GAC Group; first author of VoxelNet; formerly Senior Research Manager at Waymo and Apple)',
+  },
   {
     title: 'Research on Human-Machine Collaborative Cognitive and Explainable Decision-Making Systems for Inland Waterway Vessel Navigation Safety',
     org: 'Hubei Key Laboratory of Inland Shipping Technology',

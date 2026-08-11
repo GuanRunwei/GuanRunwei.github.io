@@ -24,10 +24,18 @@ export default function Research() {
       <div className="space-y-3">
         {projects.map((p) => (
           <div key={p.title} className="rounded-lg border border-slate-200 p-4">
-            <p className="text-[15px] font-medium text-slate-800">{p.title}</p>
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-[15px] font-medium text-slate-800">{p.title}</p>
+              {p.period && (
+                <span className="shrink-0 rounded bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-500">
+                  {p.period}
+                </span>
+              )}
+            </div>
             <p className="mt-1 text-sm text-slate-500">
               {p.org} · <span className="font-medium text-sky-800">{p.role}</span>
             </p>
+            {p.note && <p className="mt-1 text-sm text-slate-500">{p.note}</p>}
           </div>
         ))}
       </div>
