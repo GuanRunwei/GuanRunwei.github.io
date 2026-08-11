@@ -7,6 +7,8 @@ import { visitorPoints as fallbackPoints, type VisitorPoint } from '@/data/profi
 // [{ city, country, lat, lng, visits }] — the globe will use live data.
 const VISITOR_API = import.meta.env.VITE_VISITOR_API as string | undefined
 
+const MMV_SRCDOC = `<!doctype html><html><head><meta charset="utf-8"/><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body><script type="text/javascript" id="mmvst_globe" src="//mapmyvisitors.com/globe.js?d=RgQDD98d1mxx5QXwxCKqHIGSwrZEoCGJvKwO6vJuWvc"></scr` + `ipt></body></html>`
+
 export default function VisitorGlobe() {
   const containerRef = useRef<HTMLDivElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,9 +65,28 @@ export default function VisitorGlobe() {
         <Globe2 size={20} className="text-sky-700" /> Visitor Map
       </h2>
       <p className="mb-4 text-sm text-slate-500">
+        Real-time visitor globe powered by MapMyVisitors, tracking every visit since deployment.
+      </p>
+
+      {/* Live visitor globe (MapMyVisitors) — loaded inside an isolated iframe
+          because the third-party script expects a classic page load. */}
+      <div className="mb-8 flex justify-center rounded-xl border border-slate-200 bg-slate-50 py-4">
+        <iframe
+          title="Live visitor globe"
+          srcDoc={MMV_SRCDOC}
+          className="h-[340px] w-full max-w-[560px]"
+          frameBorder={0}
+          scrolling="no"
+        />
+      </div>
+
+      <h3 className="mb-1 font-serif text-lg font-bold text-slate-800">
+        Interactive Visitor Globe
+      </h3>
+      <p className="mb-4 text-sm text-slate-500">
         {live
           ? 'Live visitor locations and page-view counts.'
-          : 'Demo data — connect an analytics endpoint (VITE_VISITOR_API) or a ClustrMaps widget after deployment to show live visitor stats.'}
+          : 'Demo data — connect an analytics endpoint (VITE_VISITOR_API) to switch this globe to live data.'}
       </p>
 
       <div className="grid items-center gap-6 md:grid-cols-2">
