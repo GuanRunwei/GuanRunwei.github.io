@@ -8,7 +8,7 @@ export default function Hero() {
         {/* Left: avatar + links */}
         <div className="flex shrink-0 flex-col items-center md:w-56">
           <img
-            src="https://github.com/GuanRunwei.png"
+            src="/avatar.jpg"
             alt="Runwei Guan"
             className="h-44 w-44 rounded-full border border-slate-200 object-cover shadow-sm"
           />
