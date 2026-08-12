@@ -22,6 +22,8 @@ jobs:
         run: python scripts/fetch_scholar.py
       - run: npm ci
       - run: npm run build
+        env:
+          VITE_VISITOR_API: ${{ vars.VITE_VISITOR_API }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

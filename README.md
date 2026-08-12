@@ -25,22 +25,24 @@ npm run build          # 产物在 dist/，为纯静态站点
 
 ## 访客地球仪
 
-页面包含两个地球仪：
+交互式 3D 地球仪（react-globe.gl）+ 自建 Cloudflare Worker 统计后端
+（`cloudflare-worker/worker.js`，城市级访客位置与访问量，数据完全自有）。
 
-1. **MapMyVisitors 实时挂件**（页面顶部，iframe 隔离加载）：
-   真实统计每位访客的位置，无需任何维护。管理后台：https://www.mapmyvisitors.com
-2. **交互式 3D 地球仪**（react-globe.gl）：默认显示
-   `src/data/profile.ts` 中 `visitorPoints` 的演示数据。
-   如需切换为实时数据，写一个定时脚本从分析服务（如 GoatCounter /
-   Cloudflare Web Analytics）导出按城市聚合的 JSON：
-   ```json
-   [{ "city": "Guangzhou", "country": "China", "lat": 23.13, "lng": 113.26, "visits": 486 }]
-   ```
-   然后在项目根目录创建 `.env`：
-   ```
-   VITE_VISITOR_API=https://你的域名/visitors.json
-   ```
-   重新构建后自动切换（拉取失败时回退演示数据）。
+**启用实时统计（一次性，约 10 分钟）：**
+
+1. 注册 Cloudflare 免费账号 → Workers & Pages → Create Worker
+2. 粘贴 `cloudflare-worker/worker.js` 全部代码，Deploy
+3. Worker Settings → Bindings → 添加 KV Namespace，变量名必须为 `VISITOR_KV`
+4. 复制 Worker URL（形如 `https://xxx.<you>.workers.dev`）
+5. 两处配置该地址（不带末尾斜杠）：
+   - 本地：项目根目录 `.env` 加 `VITE_VISITOR_API=<Worker URL>`
+   - CI：GitHub 仓库 → Settings → Secrets and variables → Actions →
+     **Variables** → 新建 `VITE_VISITOR_API`
+6. push 一次触发重新部署，地球仪即切换为真实数据
+
+未配置时地球仪显示 `src/data/profile.ts` 中 `visitorPoints` 的演示数据；
+配置后每次页面访问都会调用 `GET /stats?hit=1` 记录并返回最新统计。
+第三方挂件（MapMyVisitors/ClustrMaps）已因服务端瘫痪弃用。
 
 ## 部署
 

@@ -1,36 +1,153 @@
-import { Globe2 } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import Globe from 'react-globe.gl'
+import { Globe2, Users, MapPinned, TrendingUp } from 'lucide-react'
+import { visitorPoints as fallbackPoints, type VisitorPoint } from '@/data/profile'
+
+// Live visitor tracking is powered by a Cloudflare Worker
+// (see cloudflare-worker/worker.js). Set VITE_VISITOR_API in .env to the
+// Worker base URL, e.g. https://visitor-counter.<you>.workers.dev
+// The Worker endpoint GET /stats?hit=1 records this visit and returns
+// { total: number, points: [{ city, country, lat, lng, visits }] }.
+// Until it is configured, the globe shows demo data.
+const VISITOR_API = import.meta.env.VITE_VISITOR_API as string | undefined
 
 export default function VisitorGlobe() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const globeRef = useRef<any>(null)
+  const [size, setSize] = useState({ w: 480, h: 480 })
+  const [points, setPoints] = useState<VisitorPoint[]>(fallbackPoints)
+  const [live, setLive] = useState(false)
+
+  useEffect(() => {
+    if (!VISITOR_API) return
+    fetch(`${VISITOR_API}/stats?hit=1`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((data: { total?: number; points?: VisitorPoint[] }) => {
+        if (data && Array.isArray(data.points)) {
+          setPoints(data.points)
+          setLive(true)
+        }
+      })
+      .catch(() => {/* keep fallback demo data */})
+  }, [])
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      const w = el.clientWidth
+      setSize({ w, h: Math.min(w, 520) })
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const g = globeRef.current
+    if (!g) return
+    g.controls().autoRotate = true
+    g.controls().autoRotateSpeed = 0.6
+    g.controls().enableZoom = true
+    g.pointOfView({ lat: 25, lng: 112, altitude: 2.1 })
+  }, [])
+
+  const stats = useMemo(() => {
+    const total = points.reduce((s, p) => s + p.visits, 0)
+    const countries = new Set(points.map((p) => p.country)).size
+    const top = [...points].sort((a, b) => b.visits - a.visits).slice(0, 6)
+    return { total, countries, cities: points.length, top }
+  }, [points])
+
+  const maxVisits = stats.top[0]?.visits ?? 1
+
   return (
     <section id="visitors" className="scroll-mt-20 py-8">
       <h2 className="mb-1 flex items-center gap-2 font-serif text-2xl font-bold">
         <Globe2 size={20} className="text-sky-700" /> Visitor Map
       </h2>
       <p className="mb-4 text-sm text-slate-500">
-        Real-time visitor globe powered by{' '}
-        <a
-          href="https://www.mapmyvisitors.com"
-          target="_blank"
-          rel="noreferrer"
-          className="text-sky-700 hover:underline"
-        >
-          MapMyVisitors
-        </a>
-        , tracking every visit since deployment. Click the globe for detailed
-        country / city statistics.
+        {live
+          ? 'Live visitor locations and page-view counts, recorded by our own Cloudflare Worker.'
+          : 'Demo data shown — live tracking switches on once the Cloudflare Worker endpoint (VITE_VISITOR_API) is configured.'}
       </p>
 
-      {/* The widget script validates the registered domain, so it is served
-          from a real same-origin page (public/visitor-globe.html) instead of
-          an about:srcdoc iframe. */}
-      <div className="flex justify-center rounded-xl border border-slate-200 bg-slate-50 py-4">
-        <iframe
-          title="Live visitor globe"
-          src="/visitor-globe.html"
-          className="h-[360px] w-full max-w-[600px]"
-          frameBorder={0}
-          scrolling="no"
-        />
+      <div className="grid items-center gap-6 md:grid-cols-2">
+        <div ref={containerRef} className="overflow-hidden rounded-xl bg-slate-900">
+          <Globe
+            ref={globeRef}
+            width={size.w}
+            height={size.h}
+            backgroundColor="rgba(2,6,23,1)"
+            globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+            bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+            showAtmosphere
+            atmosphereColor="#38bdf8"
+            atmosphereAltitude={0.18}
+            pointsData={points}
+            pointLat={(d: object) => (d as VisitorPoint).lat}
+            pointLng={(d: object) => (d as VisitorPoint).lng}
+            pointColor={() => '#f59e0b'}
+            pointAltitude={(d: object) =>
+              0.05 + (0.3 * (d as VisitorPoint).visits) / maxVisits
+            }
+            pointRadius={(d: object) =>
+              0.25 + (0.9 * (d as VisitorPoint).visits) / maxVisits
+            }
+            pointLabel={(d: object) => {
+              const p = d as VisitorPoint
+              return `<div style="font-family:sans-serif"><b>${p.city}</b>, ${p.country}<br/>${p.visits} visits</div>`
+            }}
+            labelsData={stats.top}
+            labelLat={(d: object) => (d as VisitorPoint).lat}
+            labelLng={(d: object) => (d as VisitorPoint).lng}
+            labelText={(d: object) => (d as VisitorPoint).city}
+            labelSize={1.1}
+            labelDotRadius={0.3}
+            labelColor={() => 'rgba(226,232,240,0.9)'}
+            labelResolution={2}
+          />
+        </div>
+
+        <div>
+          <div className="mb-5 grid grid-cols-3 gap-3 text-center">
+            <div className="rounded-lg border border-slate-200 py-3">
+              <Users size={16} className="mx-auto mb-1 text-sky-700" />
+              <div className="text-xl font-bold text-slate-900">{stats.total.toLocaleString()}</div>
+              <div className="text-xs text-slate-500">Total Visits</div>
+            </div>
+            <div className="rounded-lg border border-slate-200 py-3">
+              <MapPinned size={16} className="mx-auto mb-1 text-sky-700" />
+              <div className="text-xl font-bold text-slate-900">{stats.countries}</div>
+              <div className="text-xs text-slate-500">Countries</div>
+            </div>
+            <div className="rounded-lg border border-slate-200 py-3">
+              <TrendingUp size={16} className="mx-auto mb-1 text-sky-700" />
+              <div className="text-xl font-bold text-slate-900">{stats.cities}</div>
+              <div className="text-xs text-slate-500">Cities</div>
+            </div>
+          </div>
+
+          <h3 className="mb-2 text-sm font-semibold text-slate-700">Top Locations</h3>
+          <ul className="space-y-2">
+            {stats.top.map((p) => (
+              <li key={p.city} className="text-sm">
+                <div className="mb-0.5 flex justify-between">
+                  <span className="text-slate-700">
+                    {p.city}, {p.country}
+                  </span>
+                  <span className="font-mono text-slate-500">{p.visits}</span>
+                </div>
+                <div className="h-1.5 w-full rounded bg-slate-100">
+                  <div
+                    className="h-1.5 rounded bg-sky-600"
+                    style={{ width: `${(100 * p.visits) / maxVisits}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   )
