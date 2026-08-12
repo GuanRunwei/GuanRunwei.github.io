@@ -2,6 +2,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Daily at 16:17 UTC (00:17 Beijing) — refreshes Google Scholar stats
+    - cron: '17 16 * * *'
 permissions:
   contents: read
   pages: write
@@ -14,6 +18,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Fetch latest Google Scholar stats
+        run: python scripts/fetch_scholar.py
       - run: npm ci
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3

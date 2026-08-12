@@ -1,7 +1,13 @@
 import { Mail, GraduationCap, Github, Globe, MapPin } from 'lucide-react'
 import { profile } from '@/data/profile'
+import scholar from '@/data/scholar.json'
 
 export default function Hero() {
+  const stats = {
+    citations: scholar.citations ?? profile.stats.citations,
+    hIndex: scholar.hIndex ?? profile.stats.hIndex,
+    i10Index: scholar.i10Index ?? profile.stats.i10Index,
+  }
   return (
     <section id="about" className="pt-24 pb-10">
       <div className="flex flex-col gap-8 md:flex-row">
@@ -34,18 +40,21 @@ export default function Hero() {
           </div>
           <div className="mt-5 grid w-full grid-cols-3 gap-2 text-center">
             <div className="rounded-lg bg-slate-50 py-2">
-              <div className="text-lg font-bold text-sky-800">{profile.stats.citations}</div>
+              <div className="text-lg font-bold text-sky-800">{stats.citations}</div>
               <div className="text-[11px] text-slate-500">Citations</div>
             </div>
             <div className="rounded-lg bg-slate-50 py-2">
-              <div className="text-lg font-bold text-sky-800">{profile.stats.hIndex}</div>
+              <div className="text-lg font-bold text-sky-800">{stats.hIndex}</div>
               <div className="text-[11px] text-slate-500">h-index</div>
             </div>
             <div className="rounded-lg bg-slate-50 py-2">
-              <div className="text-lg font-bold text-sky-800">{profile.stats.i10Index}</div>
+              <div className="text-lg font-bold text-sky-800">{stats.i10Index}</div>
               <div className="text-[11px] text-slate-500">i10-index</div>
             </div>
           </div>
+          <p className="mt-2 text-[10px] text-slate-400">
+            Citation stats auto-updated daily from Google Scholar ({scholar.updatedAt})
+          </p>
         </div>
 
         {/* Right: bio */}
