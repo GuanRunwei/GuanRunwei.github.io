@@ -19,14 +19,15 @@ export const profile = {
     'I obtained my Ph.D. from the University of Liverpool (2022.3 – 2024.11), and was a researcher at the Institute of Deep Perception Technology, Jiangsu Industrial Technology Research Institute (supervised by Prof. Yutao Yue, Prof. Ka Lok Man, Prof. Jeremy Smith and Prof. Eng Gee Lim). Before that, I received my M.S. in Data Science from the University of Southampton and the Alan Turing Institute (2020.10 – 2021.11). I am also founding FertiTech AI in the field of AI + IVF, and previously worked as an R&D engineer at Hundsun Technologies Inc.',
   ],
   stats: {
-    citations: 1315,
-    hIndex: 17,
-    i10Index: 28,
-    papers: 70,
+    citations: 1536,
+    hIndex: 18,
+    i10Index: 32,
+    papers: 85,
   },
 }
 
 export const news: { date: string; text: string }[] = [
+  { date: '2026.10', text: 'One paper accepted by IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI, CCF-A)' },
   { date: '2026.07', text: 'One paper accepted by IEEE Transactions on Intelligent Transportation Systems (SCI Q1, IF: 9.1)' },
   { date: '2026.07', text: 'One paper accepted by IEEE Internet of Things Journal (SCI Q1, IF: 8.7)' },
   { date: '2026.06', text: 'One paper accepted by Information Fusion (SCI Q1, IF: 15.5, CAAI-A)' },
