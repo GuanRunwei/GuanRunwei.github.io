@@ -109,6 +109,8 @@ export const services = {
   reviewer: [
     'IEEE Transactions on Robotics (TRO)',
     'IEEE Transactions on Neural Networks and Learning Systems (TNNLS)',
+    'IEEE Transactions on Image Processing (TIP)',
+    'IEEE Transactions on Aerospace and Electronic Systems (TAES)',
     'IEEE Transactions on Circuits and Systems for Video Technology (TCSVT)',
     'IEEE Transactions on Multimedia (TMM)',
     'IEEE Transactions on Intelligent Vehicles (TIV)',
